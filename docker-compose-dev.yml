@@ -1,0 +1,53 @@
+version: '3.7'
+
+services:
+
+  phpmyadmin:
+    depends_on:
+      - db_local_dev_central_de_ajuda
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8082:80
+    environment:
+      PMA_HOST: db_local_dev_central_de_ajuda
+      MYSQL_ROOT_PASSWORD: 1
+
+  db_local_dev_central_de_ajuda:
+    image: mysql:8
+    restart: always
+    # volumes: 
+    #   - ./database/:/var/lib/mysql:rw
+    ports: 
+      - 3307:3307
+    environment:
+      - DATABASE_USER=root
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=db_local_dev_central_de_ajuda
+    command: --default-authentication-plugin=mysql_native_password
+
+  central_de_ajuda_dev:
+    container_name: central_de_ajuda_dev
+    restart: always
+    depends_on:
+      - db_local_dev_central_de_ajuda
+    volumes: 
+      - .:/central-de-ajuda-rs/
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - PYTHONUNBUFFERED=1
+
+      - APP_DATABASE_NAME=db_local_dev_central_de_ajuda
+      - APP_DATABASE_USER=root  
+      - APP_DATABASE_PASSWORD=root
+      - APP_DATABASE_PORT=3306
+      - APP_DATABASE_HOST=db_local_dev_central_de_ajuda
+
+    command: python manage.py runserver 0.0.0.0:8000
