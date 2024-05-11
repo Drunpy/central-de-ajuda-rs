@@ -1,15 +1,16 @@
 from django.db import models
 
-class ProxyLogistico(models.Model): # TODO
-    class Meta:
-        proxy = True
+# class ProxyLogistico(models.Model): # TODO
+#     class Meta:
+#         proxy = True
 
-class Items(models.Model): # TODO
-    nome = 
-    quantidade = 
-    proxy_logistico = models.ForeignKey(
-        "abrigos.proxylogistico", verbose_name='Abrigo', null=True, related_name="enderecos", on_delete=models.CASCADE
-    )
+# class Items(models.Model): # TODO
+#     nome = 
+#     quantidade = 
+#     categoria = 
+#     proxy_logistico = models.ForeignKey(
+#         "abrigos.proxylogistico", verbose_name='Abrigo', null=True, related_name="enderecos", on_delete=models.CASCADE
+#     )
 
 class BasicFields(models.Model):
     criado_em = models.DateTimeField(auto_now_add=True, verbose_name="Data de criação no sistema")
@@ -26,7 +27,7 @@ class TiposDeAbrigo(models.Model): # TODO
     #         ("outro", "Outro"),
     #     )
 
-class Enderecos(models.Model, ProxyLogistico): # TODO
+class Enderecos(models.Model): # TODO
 
     municipio = models.CharField(null=True, blank=True, verbose_name="Município", max_length=200)
     bairro = models.CharField(null=True, blank=True, verbose_name="Bairro", max_length=200)
@@ -35,7 +36,7 @@ class Enderecos(models.Model, ProxyLogistico): # TODO
     complemento = models.CharField(null=True, blank=True, verbose_name="Complemento", max_length=200)
 
     zona = models.CharField(
-        null=True, 
+        null=True,
         blank=True, 
         verbose_name="Zona", 
         max_length=100
@@ -47,17 +48,18 @@ class Enderecos(models.Model, ProxyLogistico): # TODO
         verbose_name="CEP", 
         max_length=20
     )
-    anotacao = models.TextField(blank=True, verbose_name="Anotações")
+    anotacao = models.TextField(
+        blank=True, verbose_name="Anotações"
+    )
+
+    lat_long = models.CharField( # Formato: [x.xxx, y.yyy]
+        max_length=30, null=True, blank=True, verbose_name="Latitude, Longitude",
+    )
 
 
-class Abrigos(BasicFields, ProxyLogistico):
+class Abrigos(BasicFields):
     nome = models.CharField(
         null=False, blank=False, verbose_name="Nome do abrigo", max_length=250
-    )
-    tipo = models.CharField(
-        max_length=50,
-        choices=TIPOS_DE_ABRIGO,
-        verbose_name="Tipo de abrigo",
     )
     tipo = models.ForeignKey(
         "abrigos.TiposDeAbrigo", verbose_name='Tipo do abrigo', null=True, related_name="tipo", on_delete=models.CASCADE
@@ -77,9 +79,7 @@ class Abrigos(BasicFields, ProxyLogistico):
     informacoes_de_contato = models.TextField(
         blank=True, verbose_name="Informações de contato"
     )
-    lat_long = models.CharField( # Formato: [x.xxx, y.yyy]
-        max_length=30, null=True, blank=True, verbose_name="Latitude, Longitude",
-    )
+    
     endereco = models.ForeignKey(
         "abrigos.enderecos", verbose_name='Abrigo', null=True, related_name="enderecos", on_delete=models.CASCADE
     )
