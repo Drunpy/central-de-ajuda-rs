@@ -73,7 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'central_de_ajuda.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
@@ -83,7 +82,7 @@ DATABASES = {
         'USER': environ.get('APP_DATABASE_USER'),
         'PASSWORD': environ.get('APP_DATABASE_PASSWORD'),
         'HOST': environ.get("APP_DATABASE_HOST"),
-        'PORT': environ.get("APP_DATABASE_PORT"),
+        'PORT': int(environ.get("APP_DATABASE_PORT")),
     }
 }
 

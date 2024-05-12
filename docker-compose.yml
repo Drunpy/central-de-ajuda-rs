@@ -31,6 +31,6 @@ services:
       - APP_DATABASE_USER=APP_DATABASE_USER  # DB Variables should be at file .env.dev or .env.prod 
       - APP_DATABASE_PASSWORD=APP_DATABASE_PASSWORD # DB Variables should be at file .env.dev or .env.prod 
       - APP_DATABASE_HOST=APP_DATABASE_HOST # DB Variables should be at file .env.dev or .env.prod 
-      - APP_DATABASE_PORT=APP_DATABASE_PORT # DB Variables should be at file .env.dev or .env.prod 
+      - APP_DATABASE_PORT=3306 # DB Variables should be at file .env.dev or .env.prod 
       
     command: python manage.py runserver 0.0.0.0:8000

@@ -1,1 +1,4 @@
+mysql-connector
+mysqlclient
+requests
 Django==3.2.25
