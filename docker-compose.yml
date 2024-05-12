@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+
+  nginx_prod:
+    container_name: nginx_prod
+    image: nginx:alpine 
+    volumes:
+      - ./nginx-prd/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx-prd/ssl-config.conf:/etc/nginx/ssl-config.conf
+      - /ssl-certs/letsencrypt/:/etc/letsencrypt/
+      - ./static/:/static/
+    ports:
+      - "80:80"
+      - "443:443"
+
+  central_de_ajuda_rs:
+    container_name: central_de_ajuda_rs
+    restart: always
+    volumes: 
+      - .:/central_de_ajuda/
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=False
+      - PYTHONUNBUFFERED=1
+      - APP_DATABASE_NAME=APP_DATABASE_NAME # DB Variables should be at file .env.dev or .env.prod 
+      - APP_DATABASE_USER=APP_DATABASE_USER  # DB Variables should be at file .env.dev or .env.prod 
+      - APP_DATABASE_PASSWORD=APP_DATABASE_PASSWORD # DB Variables should be at file .env.dev or .env.prod 
+      - APP_DATABASE_HOST=APP_DATABASE_HOST # DB Variables should be at file .env.dev or .env.prod 
+      - APP_DATABASE_PORT=APP_DATABASE_PORT # DB Variables should be at file .env.dev or .env.prod 
+      
+    command: python manage.py runserver 0.0.0.0:8000
