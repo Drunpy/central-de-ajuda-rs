@@ -1,31 +1,19 @@
 from django.db import models
 
-# class ProxyLogistico(models.Model): # TODO
-#     class Meta:
-#         proxy = True
+class VetorLogistico(models.Model): # TODO
+    nome = models.CharField(max_length=150)
 
 # class Items(models.Model): # TODO
 #     nome = 
 #     quantidade = 
 #     categoria = 
 #     proxy_logistico = models.ForeignKey(
-#         "abrigos.proxylogistico", verbose_name='Abrigo', null=True, related_name="enderecos", on_delete=models.CASCADE
+#         "abrigos.VetorLogistico", verbose_name='Abrigo', null=True, related_name="enderecos", on_delete=models.CASCADE
 #     )
 
 class BasicFields(models.Model):
     criado_em = models.DateTimeField(auto_now_add=True, verbose_name="Data de criação no sistema")
     ultima_atualizacao = models.DateTimeField(auto_now=True, verbose_name="Ultima atualização")
-
-
-class TiposDeAbrigo(models.Model): # TODO
-    nome = models.CharField(max_length=150)
-    # TIPOS_DE_ABRIGO = (
-    #         ("idoso", "Idoso"),
-    #         ("infantil", "Infantil"),
-    #         ("feminino", "Feminino"),
-    #         ("animal", "Animal"),
-    #         ("outro", "Outro"),
-    #     )
 
 class Enderecos(models.Model): # TODO
 
@@ -56,6 +44,15 @@ class Enderecos(models.Model): # TODO
         max_length=30, null=True, blank=True, verbose_name="Latitude, Longitude",
     )
 
+class TiposDeAbrigo(models.Model): # TODO
+    nome = models.CharField(max_length=150)
+    # TIPOS_DE_ABRIGO = (
+    #         ("idoso", "Idoso"),
+    #         ("infantil", "Infantil"),
+    #         ("feminino", "Feminino"),
+    #         ("animal", "Animal"),
+    #         ("outro", "Outro"),
+    #     )
 
 class Abrigos(BasicFields):
     nome = models.CharField(
