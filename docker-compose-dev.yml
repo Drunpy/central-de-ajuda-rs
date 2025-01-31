@@ -1,5 +1,9 @@
 version: '3.7'
 
+networks:
+  central-de-ajuda-network:
+    driver: bridge
+
 services:
 
   phpmyadmin:
@@ -12,12 +16,22 @@ services:
     environment:
       PMA_HOST: db_local_dev_central_de_ajuda
       MYSQL_ROOT_PASSWORD: 1
+    networks:
+      - central-de-ajuda-network
 
   db_local_dev_central_de_ajuda:
+    tty: true
+    restart: on-failure
+    networks:
+      - central-de-ajuda-network
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     image: mysql:8
-    restart: always
-    # volumes: 
-    #   - ./database/:/var/lib/mysql:rw
+    volumes:
+      - ./mysql-local:/var/lib/mysql
     ports: 
       - 3307:3307
     environment:
@@ -26,9 +40,11 @@ services:
       - MYSQL_PASSWORD=admin
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=db_local_dev_central_de_ajuda
-    command: --default-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=mysql_native_password --innodb-use-native-aio=0
 
   central_de_ajuda_dev:
+    networks:
+      - central-de-ajuda-network
     container_name: central_de_ajuda_dev
     restart: always
     depends_on:
